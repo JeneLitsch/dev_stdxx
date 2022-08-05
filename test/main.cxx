@@ -4,9 +4,22 @@
 
 int main() {
 	cphinx::cphinx framework;
-	framework.run(test::accu_stack_init, "stx::accu_stack init value");
-	framework.run(test::accu_stack_top_push_pop, "stx::accu_stack top push and pop");
-	framework.run(test::accu_stack_empty_size, "stx::accu_stack empty and size");
+	framework.run(
+		test::accu_stack_init,
+		"stx::accu_stack init value");
+	
+	framework.run(
+		test::accu_stack_top_push_pop_emplace,
+		"stx::accu_stack top push and pop");
+	
+	framework.run(
+		test::accu_stack_empty_size,
+		"stx::accu_stack empty and size");
+
+	framework.run(
+		test::accu_stack_swap,
+		"stx::accu_stack swap");
+	
 	framework.dignostics(std::cout);
 	return 0;
 }

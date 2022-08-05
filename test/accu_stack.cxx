@@ -49,7 +49,7 @@ namespace test {
 
 
 
-	void accu_stack_top_push_pop(cphinx::validator & validator) {
+	void accu_stack_top_push_pop_emplace(cphinx::validator & validator) {
 		{
 			stx::accu_stack<int> stack;
 			
@@ -81,7 +81,7 @@ namespace test {
 			stack.push(" World");
 			validator.assert_equal(stack.top(), "Hello World");
 
-			stack.push("!");
+			stack.emplace("!");
 			validator.assert_equal(stack.top(), "Hello World!");
 
 			stack.pop();
@@ -92,6 +92,12 @@ namespace test {
 
 			stack.pop();
 			validator.assert_equal(stack.top(), "");
+
+			stack.emplace("Test");
+			validator.assert_equal(stack.top(), "Test");
+
+			stack.emplace("123");
+			validator.assert_equal(stack.top(), "Test123");
 		}
 	}
 
@@ -110,6 +116,29 @@ namespace test {
 			stack.pop();
 			validator.assert_true(stack.empty());
 			validator.assert_equal(stack.size(), 0);
+		}
+	}
+
+
+
+	void accu_stack_swap(cphinx::validator & validator) {
+		{
+			stx::accu_stack<int> stack_a{42};
+			stx::accu_stack<int> stack_b{1330};
+
+			validator.assert_equal(stack_a.top(), 42);
+			validator.assert_equal(stack_b.top(), 1330);
+
+			std::swap(stack_a, stack_b);
+
+			validator.assert_equal(stack_a.top(), 1330);
+			validator.assert_equal(stack_b.top(), 42);
+
+			stack_a.push(7);
+			std::swap(stack_a, stack_b);
+
+			validator.assert_equal(stack_a.top(), 42);
+			validator.assert_equal(stack_b.top(), 1337);
 		}
 	}
 }
