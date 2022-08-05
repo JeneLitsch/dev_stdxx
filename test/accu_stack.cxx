@@ -97,16 +97,19 @@ namespace test {
 
 
 
-	void accu_stack_empty(cphinx::validator & validator) {
+	void accu_stack_empty_size(cphinx::validator & validator) {
 		{
 			stx::accu_stack<int> stack;
 			validator.assert_true(stack.empty());
+			validator.assert_equal(stack.size(), 0);
 			
 			stack.push(1);
 			validator.assert_false(stack.empty());
+			validator.assert_equal(stack.size(), 1);
 
 			stack.pop();
 			validator.assert_true(stack.empty());
+			validator.assert_equal(stack.size(), 0);
 		}
 	}
 }
