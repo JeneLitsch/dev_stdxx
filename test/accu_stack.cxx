@@ -71,6 +71,40 @@ namespace test {
 			stack.pop();
 			validator.assert_equal(stack.top(), 0);
 		}
+
+		{
+
+			stx::accu_stack<int, std::deque<int>, std::minus<int>> stack{5};		
+			validator.assert_equal(stack.top(), 5);
+			
+			stack.push(6);
+			validator.assert_equal(stack.top(), -1);
+
+			stack.push(10);
+			validator.assert_equal(stack.top(), -11);
+
+			stack.pop();
+			validator.assert_equal(stack.top(), -1);
+		
+			stack.pop();
+			validator.assert_equal(stack.top(), 5);
+		}
+
+		{
+			stx::accu_stack<int, std::deque<int>, std::multiplies<int>> stack{2};		
+			
+			stack.push(2);
+			validator.assert_equal(stack.top(), 4);
+			
+			stack.push(2);
+			validator.assert_equal(stack.top(), 8);
+			
+			stack.push(2);
+			validator.assert_equal(stack.top(), 16);
+
+			stack.push(2);
+			validator.assert_equal(stack.top(), 32);
+		}
 		
 		{
 			stx::accu_stack<std::string> stack;
