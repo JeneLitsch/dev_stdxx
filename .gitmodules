@@ -1,0 +1,6 @@
+[submodule "libs/stdxx"]
+	path = libs/stdxx
+	url = https://github.com/JeneLitsch/stdxx.git
+[submodule "libs/cphinx"]
+	path = libs/cphinx
+	url = https://github.com/JeneLitsch/Cphinx.git
