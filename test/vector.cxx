@@ -145,5 +145,31 @@ namespace test {
 		
 		const stx::vector2i c = -b;
 		validator.assert_equal(c, stx::vector2i{1, 2}, "Invalid vector");
+	}
+
+
+
+	CPHINX_TEST(vector2_dot_float) {
+		const auto dot_1 = stx::dot(stx::vector2f{1, 2}, stx::vector2f{1, 2});
+		validator.assert_equal(dot_1, 5, "Invalid dot product");
+
+		const auto dot_2 = stx::dot(stx::vector2f{-2, 1}, stx::vector2f{1, 2});
+		validator.assert_equal(dot_2, 0, "Invalid dot product");
+
+		const auto dot_3 = stx::dot(stx::vector2f{-1, -2}, stx::vector2f{1, 2});
+		validator.assert_equal(dot_3, -5, "Invalid dot product");
+	} 
+
+
+
+	CPHINX_TEST(vector2_dot_int) {
+		const auto dot_1 = stx::dot(stx::vector2i{1, 2}, stx::vector2i{1, 2});
+		validator.assert_equal(dot_1, 5, "Invalid dot product");
+
+		const auto dot_2 = stx::dot(stx::vector2i{-2, 1}, stx::vector2i{1, 2});
+		validator.assert_equal(dot_2, 0, "Invalid dot product");
+
+		const auto dot_3 = stx::dot(stx::vector2i{-1, -2}, stx::vector2i{1, 2});
+		validator.assert_equal(dot_3, -5, "Invalid dot product");
 	} 
 }
