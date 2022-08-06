@@ -150,26 +150,64 @@ namespace test {
 
 
 	CPHINX_TEST(vector2_dot_float) {
-		const auto dot_1 = stx::dot(stx::vector2f{1, 2}, stx::vector2f{1, 2});
-		validator.assert_equal(dot_1, 5, "Invalid dot product");
+		const auto run = [&] (auto vec1, auto vec2, auto result) {
+			validator.assert_equal(stx::dot(vec1, vec2), result, "Invalid dot");
+		};
 
-		const auto dot_2 = stx::dot(stx::vector2f{-2, 1}, stx::vector2f{1, 2});
-		validator.assert_equal(dot_2, 0, "Invalid dot product");
-
-		const auto dot_3 = stx::dot(stx::vector2f{-1, -2}, stx::vector2f{1, 2});
-		validator.assert_equal(dot_3, -5, "Invalid dot product");
+		run(stx::vector2f{0, 0}, stx::vector2f{0, 0}, 0);
+		run(stx::vector2f{1, 0}, stx::vector2f{1, 0}, 1);
+		run(stx::vector2f{1, 0}, stx::vector2f{0, 1}, 0);
+		run(stx::vector2f{1, 0}, stx::vector2f{-1, 0}, -1);
+		run(stx::vector2f{1, 2}, stx::vector2f{1, 2}, 5);
+		run(stx::vector2f{-2, 1}, stx::vector2f{1, 2}, 0);
+		run(stx::vector2f{-1, -2}, stx::vector2f{1, 2}, -5);
 	} 
 
 
 
 	CPHINX_TEST(vector2_dot_int) {
-		const auto dot_1 = stx::dot(stx::vector2i{1, 2}, stx::vector2i{1, 2});
-		validator.assert_equal(dot_1, 5, "Invalid dot product");
+		const auto run = [&] (auto vec1, auto vec2, auto result) {
+			validator.assert_equal(stx::dot(vec1, vec2), result, "Invalid dot");
+		};
 
-		const auto dot_2 = stx::dot(stx::vector2i{-2, 1}, stx::vector2i{1, 2});
-		validator.assert_equal(dot_2, 0, "Invalid dot product");
+		run(stx::vector2i{1, 2}, stx::vector2i{1, 2}, 5);
+		run(stx::vector2i{-2, 1}, stx::vector2i{1, 2}, 0);
+		run(stx::vector2i{-1, -2}, stx::vector2i{1, 2}, -5);
+	} 
 
-		const auto dot_3 = stx::dot(stx::vector2i{-1, -2}, stx::vector2i{1, 2});
-		validator.assert_equal(dot_3, -5, "Invalid dot product");
+
+
+	CPHINX_TEST(vector2_hypot_float) {
+		const auto run = [&] (auto vec, auto result) {
+			validator.assert_equal(stx::hypot(vec), result, "Invalid hypot");
+		};
+
+		run(stx::vector2f{0, 0}, 0);
+		run(stx::vector2f{3, 0}, 3);
+		run(stx::vector2f{-3, 0}, 3);
+		run(stx::vector2f{0, 3}, 3);
+		run(stx::vector2f{-3, 0}, 3);
+		run(stx::vector2f{3, 4}, 5);
+		run(stx::vector2f{-3, 4}, 5);
+		run(stx::vector2f{3, -4}, 5);
+		run(stx::vector2f{-3, -4}, 5);
+	} 
+
+
+	
+	CPHINX_TEST(vector2_hypot_int) {
+		const auto run = [&] (auto vec, auto result) {
+			validator.assert_equal(stx::hypot(vec), result, "Invalid hypot");
+		};
+
+		run(stx::vector2i{0, 0}, 0);
+		run(stx::vector2i{3, 0}, 3);
+		run(stx::vector2i{-3, 0}, 3);
+		run(stx::vector2i{0, 3}, 3);
+		run(stx::vector2i{-3, 0}, 3);
+		run(stx::vector2i{3, 4}, 5);
+		run(stx::vector2i{-3, 4}, 5);
+		run(stx::vector2i{3, -4}, 5);
+		run(stx::vector2i{-3, -4}, 5);
 	} 
 }
