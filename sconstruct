@@ -43,7 +43,7 @@ env = Environment(
 	CXXCOMSTR = "[Compiling] $TARGET",
 	LINKCOMSTR = "[Linking] $TARGET")
 
-env.Program('bin/test', glob(["test"]))
+env.Program('bin/test', glob(["test", "test/test"]))
 
 
 
