@@ -26,6 +26,15 @@ namespace test {
 
 
 	
+	CPHINX_TEST(vector2_copy_ctor) {
+		const stx::vector2i vec {42};
+		const stx::vector2i vec2 {vec};
+		validator.assert_equal(vec2.x, 42, "Invalid x");
+		validator.assert_equal(vec2.y, 42, "Invalid y");
+	}
+
+
+	
 	CPHINX_TEST(vector2_ostream_float) {
 		std::ostringstream oss;
 		oss << stx::vector2f{1,1} << stx::vector2f{1,-42};
