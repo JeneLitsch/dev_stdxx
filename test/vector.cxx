@@ -209,5 +209,57 @@ namespace test {
 		run(stx::vector2i{-3, 4}, 5);
 		run(stx::vector2i{3, -4}, 5);
 		run(stx::vector2i{-3, -4}, 5);
-	} 
+	}
+
+
+
+	CPHINX_TEST(vector2_round) {
+		const auto run = [&] (stx::vector2f vec, stx::vector2f result) {
+			validator.assert_equal(stx::round(vec), result, "Invalid rounding");
+		};
+
+		run({-1.0f,  1.0f}, {-1.0f,  1.0f});
+		run({ 1.5f,  2.1f}, { 2.0f,  2.0f});
+		run({-1.2f, -1.7f}, {-1.0f, -2.0f});
+		run({-1.2f, -1.5f}, {-1.0f, -2.0f});
+	}
+
+
+	
+	CPHINX_TEST(vector2_floor) {
+		const auto run = [&] (stx::vector2f vec, stx::vector2f result) {
+			validator.assert_equal(stx::floor(vec), result, "Invalid rounding");
+		};
+
+		run({-1.0f,  1.0f}, {-1.0f,  1.0f});
+		run({ 1.5f,  2.1f}, { 1.0f,  2.0f});
+		run({-1.2f, -1.7f}, {-2.0f, -2.0f});
+		run({-1.2f, -1.5f}, {-2.0f, -2.0f});
+	}
+
+
+
+	CPHINX_TEST(vector2_ceil) {
+		const auto run = [&] (stx::vector2f vec, stx::vector2f result) {
+			validator.assert_equal(stx::ceil(vec), result, "Invalid rounding");
+		};
+
+		run({-1.0f,  1.0f}, {-1.0f,  1.0f});
+		run({ 1.5f,  2.1f}, { 2.0f,  3.0f});
+		run({-1.2f, -1.7f}, {-1.0f, -1.0f});
+		run({-1.2f, -1.5f}, {-1.0f, -1.0f});
+	}
+
+
+
+	CPHINX_TEST(vector2_frac_round) {
+		const auto run = [&] (stx::vector2f vec, float frac, stx::vector2f result) {
+			validator.assert_equal(stx::round(vec, frac), result, "Invalid rounding");
+		};
+
+		run({-1.0f,  1.0f}, 0.5f, {-1.0f,  1.0f});
+		run({ 1.5f,  2.1f}, 0.5f, { 1.5f,  2.0f});
+		run({-1.2f, -1.7f}, 0.5f, {-1.0f, -1.5f});
+		run({-1.2f, -1.5f}, 0.5f, {-1.0f, -1.5f});
+	}
 }
