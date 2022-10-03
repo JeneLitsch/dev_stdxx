@@ -29,10 +29,11 @@ flags = [
 
 
 env = Environment(
-	CXX = "clang++-12",
+	CXX = "clang++-14",
 	# CXX = "g++-10",
 	CXXFLAGS = flags,
 	CPPPATH = [
+		".",
 		"libs/stdxx/",
 		"libs/cphinx/",
 	],
@@ -43,7 +44,8 @@ env = Environment(
 	CXXCOMSTR = "[Compiling] $TARGET",
 	LINKCOMSTR = "[Linking] $TARGET")
 
-env.Program('bin/test', glob(["test", "test/test"]))
+env.Program('bin/test', glob(["test"]))
+env.Program('bin/sandbox', glob(["sandbox"]))
 
 
 
