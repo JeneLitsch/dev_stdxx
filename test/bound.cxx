@@ -103,18 +103,18 @@ CPHINX_TEST(bound_div) {
 
 
 
-CPHINX_TEST(bound_mod) {
-	stx::bound<int, -30, 20>  a {15};
-	stx::bound<int, -20, 10>  b {4};
+// CPHINX_TEST(bound_mod) {
+// 	stx::bound<int, -30, 20>  a {15};
+// 	stx::bound<int, -20, 10>  b {4};
 
-	auto r1 = a % b;
-	auto r2 = b % a;
+// 	auto r1 = a % b;
+// 	auto r2 = b % a;
 
-	validator.assert_equal(*r1,      1);
-	validator.assert_equal(r1.min(), -3);
-	validator.assert_equal(r1.max(), 2);
+// 	validator.assert_equal(*r1,      1);
+// 	validator.assert_equal(r1.min(), -3);
+// 	validator.assert_equal(r1.max(), 2);
 
-	validator.assert_equal(*r2,      4);
-	validator.assert_equal(r2.min(), -1);
-	validator.assert_equal(r2.max(), 0);
-}
+// 	validator.assert_equal(*r2,      4);
+// 	validator.assert_equal(r2.min(), -1);
+// 	validator.assert_equal(r2.max(), 0);
+// }
