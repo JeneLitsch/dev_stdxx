@@ -1,10 +1,12 @@
+#include <iostream>
+#include <memory>
 #include "proto/bound.hxx"
 #include "proto/optref.hxx"
 #include "proto/enumerate.hxx"
-#include <iostream>
+#include "proto/mandatory.hxx"
 
 
-int main() {
+void enumerate() {
 	std::vector<int> array1 {
 		1, 2, 3, 4, 5
 	};
@@ -28,4 +30,19 @@ int main() {
 		auto a = pair;
 		std::cout << pair.index() << " : " << a.value() << "\n";
 	}
+}
+
+
+
+void mandatory() {
+	stx::mandatory<int> i = 42;
+	stx::mandatory<float> f = static_cast<float>(i);
+	stx::mandatory<std::unique_ptr<int>> ptr1 = std::make_unique<int>(4);
+	stx::mandatory<std::unique_ptr<int>> ptr2 = std::move(ptr1);
+}
+
+
+
+int main() {
+	mandatory();
 }
