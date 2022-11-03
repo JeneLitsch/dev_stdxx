@@ -1,68 +1,7 @@
 #pragma once
 #include <utility>
 #include <concepts>
-
-namespace stx {
-
-	template<typename Index, typename Value>
-	struct enumerate_pair {
-	public:
-		enumerate_pair(Index i, Value * v)
-		: i {i}, v{v} {}
-
-		Index index() const {
-			return this->i;
-		}
-
-
-
-		Value & value() {
-			return *this->v;
-		}
-
-
-		
-		const Value & value() const {
-			return *this->v;
-		}
-
-
-	template<std::size_t INDEX>
-	auto & get() {
-		if constexpr (INDEX == 0) return i;
-		if constexpr (INDEX == 1) return v;
-	}
-
-	template<std::size_t INDEX>
-	auto & get() const {
-		if constexpr (INDEX == 0) return i;
-		if constexpr (INDEX == 1) return v;
-	}
-
-	private:
-		Index i;
-		Value * v;
-	};
-}
-
-
-
-namespace std {
-  	template<typename I, typename V>
-  	struct tuple_size<stx::enumerate_pair<I, V>>
-		: std::integral_constant<std::size_t, 2> {};
-
-	template<typename I, typename V>
-	struct tuple_element<0, stx::enumerate_pair<I, V>> {
-		using type = I;
-	};
-
-	template<typename I, typename V>
-	struct tuple_element<1, stx::enumerate_pair<I, V>> {
-		using type = V*;
-	};
-}
-
+#include <tuple>
 
 namespace stx {
 	template<typename Container>
@@ -76,9 +15,6 @@ namespace stx {
 	public:
 		using iterator_category = std::input_iterator_tag;
 		using difference_type = std::ptrdiff_t;
-		// using value_type = typename Iterator::value_type;
-		// using pointer = value_type*;
-		// using reference = value_type&;
 
 
 		constexpr enumerate_iterator(Iterator iter, Index index) 
@@ -87,11 +23,11 @@ namespace stx {
 
 
 		constexpr auto operator*() const {
-			return enumerate_pair{this->index, &*this->iter};
+			return std::make_tuple(this->index, &*this->iter);
 		}
 
 		constexpr auto operator*() {
-			return enumerate_pair{this->index, &*this->iter};
+			return std::make_tuple(this->index, &*this->iter);
 		}
 
 
@@ -177,6 +113,7 @@ namespace stx {
 	class const_enumerate_range {
 	public:
 
+		using iterator = enumerate_iterator<Index, iterator_of<Container>>;
 		using const_iterator = enumerate_iterator<Index, const_iterator_of<Container>>;
 
 

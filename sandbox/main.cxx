@@ -1,9 +1,35 @@
 #include <iostream>
 #include <memory>
+#include <span>
+#include <set>
 #include "proto/bound.hxx"
 #include "proto/optref.hxx"
 #include "proto/enumerate.hxx"
 #include "proto/mandatory.hxx"
+
+
+template<typename T>
+bool aaaaa(T & t) {
+	auto it = std::begin(t);
+	return std::is_const_v<std::remove_reference_t<decltype(*it)>>;
+}
+
+
+auto enumerate_container(auto & cphinx, std::span<int> & container) {
+	{	
+		std::size_t expected_index = 0;
+		auto it = std::begin(container);
+		for(auto [i, v] : stx::enumerate<std::size_t>(container)) {
+			cphinx.assert_equal(i, expected_index, "Index mismatch");
+			cphinx.assert_equal(v, *it, "Value mismatch");
+			cphinx.assert_true(!std::is_const_v<std::remove_reference_t<decltype(*v)>>, "value must NOT be const");
+			++expected_index;
+			++it;
+		}
+		cphinx.assert_equal(static_cast<std::size_t>(std::size(container)), expected_index, "Size mismatch");
+	}
+}
+
 
 
 void enumerate() {
@@ -20,29 +46,38 @@ void enumerate() {
 		1, 2, 3, 4, 5
 	};
 	
-	for(auto pair : stx::enumerate<int>(array1)) {
-		std::cout << pair.index() << " : " << pair.value() << "\n";
-		pair.value()++;
+	for(auto [index, value] : stx::enumerate<int>(array1)) {
+		std::cout << index << " : " << value << "\n";
+		value++;
+	// std::is_const_v<std::remove_reference_t<decltype(pair.value())>>;
 	}
 
 	std::cout << "\n";
 
-	for(auto pair : stx::enumerate<int>(array2)) {
-		std::cout << pair.index() << " : " << pair.value() << "\n";
-	}
-
-	std::cout << "\n";
-
-	for(const auto pair : stx::enumerate(array3)) {
-		auto a = pair;
-		std::cout << pair.index() << " : " << a.value() << "\n";
+	for(auto [index, value] : stx::enumerate<int>(array2)) {
+		std::cout << index << " : " << value << "\n";
 	}
 
 	std::cout << "\n";
 
 	for(auto [index, value] : stx::enumerate(array3)) {
-		std::cout << index << " : " << *value << "\n";
+		std::cout << index << " : " << value << "\n";
 	}
+
+	std::cout << "\n";
+
+	// std::set<int> s { 1, 2, 3, 4, 5 };
+	std::vector<int> vec = {1,2,3,4,5};
+	std::span<int> s = vec;
+	auto a = std::begin(s);
+	auto x = stx::enumerate(s);
+	auto it = std::begin(x);
+	auto [i,v] = *it;
+	for(auto [index, value] : stx::enumerate(s)) {
+		std::cout << index << " : " << value << "\n";
+	}
+
+	decltype(auto) b = aaaaa(s);
 }
 
 
@@ -57,5 +92,8 @@ void mandatory() {
 
 
 int main() {
-	enumerate();
+	// enumerate();
+	std::vector<int> vec = {1,2,3,4,5};
+	std::span<int> s = vec;
+	std::cout << aaaaa(s) << "\n";
 }

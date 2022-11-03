@@ -3,35 +3,58 @@
 #include <array>
 #include <vector>
 #include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
 #include <list>
 #include <deque>
+#include <span>
+#include <string>
+
+
+
+template<typename Index, typename Container>
+void enumerate_container_impl(auto & cphinx, Container & container, bool expected_const) {
+	Index expected_index = 0;
+	auto it = std::begin(container);
+	for(auto [i, v] : stx::enumerate<Index>(container)) {
+		cphinx.assert_equal(i, expected_index, "Index mismatch");
+		cphinx.assert_equal(*v, *it, "Value mismatch");
+		cphinx.assert_equal(std::is_const_v<std::remove_reference_t<decltype(*v)>>, expected_const, "Const mismatch");
+		++expected_index;
+		++it;
+	}
+	cphinx.assert_equal(static_cast<Index>(std::size(container)), expected_index, "Size mismatch");
+}
+
+
 
 template<typename Index, typename Container>
 void enumerate_container(auto & cphinx, Container & container) {
-	{
-		Index expected_index = 0;
-		auto it = std::begin(container);
-		for(const auto pair : stx::enumerate<Index>(container)) {
-			cphinx.assert_equal(pair.index(), expected_index, "Index mismatch");
-			cphinx.assert_equal(pair.value(), *it, "Value mismatch");
-			++expected_index;
-			++it;
-		}
-		cphinx.assert_equal(static_cast<Index>(std::size(container)), expected_index, "Size mismatch");
-	}
-
-	{
-		Index expected_index = 0;
-		auto it = std::begin(container);
-		for(auto [i, v] : stx::enumerate<Index>(container)) {
-			cphinx.assert_equal(i, expected_index, "Index mismatch");
-			cphinx.assert_equal(*v, *it, "Value mismatch");
-			++expected_index;
-			++it;
-		}
-		cphinx.assert_equal(static_cast<Index>(std::size(container)), expected_index, "Size mismatch");
-	}
+	enumerate_container_impl<Index, Container>(cphinx, container, false);
+	enumerate_container_impl<Index, const Container>(cphinx, std::as_const(container), true);
 }
+
+
+template<typename Index, typename T>
+void enumerate_container(auto & cphinx, std::span<T> & container) {
+	enumerate_container_impl<Index>(cphinx, container, false);
+	enumerate_container_impl<Index>(cphinx, std::as_const(container), false);
+}
+
+
+template<typename Index, typename T>
+void enumerate_container(auto & cphinx, std::set<T> & container) {
+	enumerate_container_impl<Index>(cphinx, container, true);
+	enumerate_container_impl<Index>(cphinx, std::as_const(container), true);
+}
+
+template<typename Index, typename T>
+void enumerate_container(auto & cphinx, std::unordered_set<T> & container) {
+	enumerate_container_impl<Index>(cphinx, container, true);
+	enumerate_container_impl<Index>(cphinx, std::as_const(container), true);
+}
+
 
 
 
@@ -44,27 +67,8 @@ CPHINX_TEST(enumerate_c_array) {
 
 
 
-CPHINX_TEST(enumerate_const_c_array) {
-	const int arr[5] = {1,2,3,4,5};
-	enumerate_container<int>(cphinx, arr);
-	enumerate_container<unsigned>(cphinx, arr);
-	enumerate_container<std::size_t>(cphinx, arr);
-}
-
-
-
-
 CPHINX_TEST(enumerate_array) {
 	std::array<int, 5> arr = {1,2,3,4,5};
-	enumerate_container<int>(cphinx, arr);
-	enumerate_container<unsigned>(cphinx, arr);
-	enumerate_container<std::size_t>(cphinx, arr);
-}
-
-
-
-CPHINX_TEST(enumerate_const_array) {
-	const std::array<int, 5> arr = {1,2,3,4,5};
 	enumerate_container<int>(cphinx, arr);
 	enumerate_container<unsigned>(cphinx, arr);
 	enumerate_container<std::size_t>(cphinx, arr);
@@ -81,15 +85,6 @@ CPHINX_TEST(enumerate_vector) {
 
 
 
-CPHINX_TEST(enumerate_const_vector) {
-	const std::vector<int> vec = {1,2,3,4,5};
-	enumerate_container<int>(cphinx, vec);
-	enumerate_container<unsigned>(cphinx, vec);
-	enumerate_container<std::size_t>(cphinx, vec);
-}
-
-
-
 CPHINX_TEST(enumerate_set) {
 	std::set<int> vec = {1,2,3,4,5};
 	enumerate_container<int>(cphinx, vec);
@@ -99,46 +94,65 @@ CPHINX_TEST(enumerate_set) {
 
 
 
-CPHINX_TEST(enumerate_const_set) {
-	const std::set<int> vec = {1,2,3,4,5};
+CPHINX_TEST(enumerate_unordered_set) {
+	std::unordered_set<int> vec = {1,2,3,4,5};
 	enumerate_container<int>(cphinx, vec);
 	enumerate_container<unsigned>(cphinx, vec);
 	enumerate_container<std::size_t>(cphinx, vec);
 }
 
+
+
+CPHINX_TEST(enumerate_map) {
+	std::map<int,int> map = {{1,1},{2,2},{3,3},{4,4},{5,5}};
+	enumerate_container<int>(cphinx, map);
+	enumerate_container<unsigned>(cphinx, map);
+	enumerate_container<std::size_t>(cphinx, map);
+}
+
+
+
+CPHINX_TEST(enumerate_unordered_map) {
+	std::unordered_map<int,int> map = {{1,1},{2,2},{3,3},{4,4},{5,5}};
+	enumerate_container<int>(cphinx, map);
+	enumerate_container<unsigned>(cphinx, map);
+	enumerate_container<std::size_t>(cphinx, map);
+}
 
 
 
 CPHINX_TEST(enumerate_list) {
-	std::list<int> vec = {1,2,3,4,5};
-	enumerate_container<int>(cphinx, vec);
-	enumerate_container<unsigned>(cphinx, vec);
-	enumerate_container<std::size_t>(cphinx, vec);
-}
-
-
-
-CPHINX_TEST(enumerate_const_list) {
-	const std::set<int> vec = {1,2,3,4,5};
-	enumerate_container<int>(cphinx, vec);
-	enumerate_container<unsigned>(cphinx, vec);
-	enumerate_container<std::size_t>(cphinx, vec);
+	std::list<int> list = {1,2,3,4,5};
+	enumerate_container<int>(cphinx, list);
+	enumerate_container<unsigned>(cphinx, list);
+	enumerate_container<std::size_t>(cphinx, list);
 }
 
 
 
 CPHINX_TEST(enumerate_deque) {
-	std::deque<int> vec = {1,2,3,4,5};
-	enumerate_container<int>(cphinx, vec);
-	enumerate_container<unsigned>(cphinx, vec);
-	enumerate_container<std::size_t>(cphinx, vec);
+	std::deque<int> deq = {1,2,3,4,5};
+	enumerate_container<int>(cphinx, deq);
+	enumerate_container<unsigned>(cphinx, deq);
+	enumerate_container<std::size_t>(cphinx, deq);
 }
 
 
 
-CPHINX_TEST(enumerate_const_deque) {
-	const std::deque<int> vec = {1,2,3,4,5};
-	enumerate_container<int>(cphinx, vec);
-	enumerate_container<unsigned>(cphinx, vec);
-	enumerate_container<std::size_t>(cphinx, vec);
+CPHINX_TEST(enumerate_span) {
+	std::vector<int> vec = {1,2,3,4,5};
+	std::span<int> span = vec;
+	enumerate_container<int>(cphinx, span);
+	enumerate_container<unsigned>(cphinx, span);
+	enumerate_container<std::size_t>(cphinx, span);
 }
+
+
+
+CPHINX_TEST(enumerate_string) {
+	std::string str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	enumerate_container<int>(cphinx, str);
+	enumerate_container<unsigned>(cphinx, str);
+	enumerate_container<std::size_t>(cphinx, str);
+}
+
