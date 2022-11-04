@@ -18,9 +18,14 @@ void enumerate_container_impl(auto & cphinx, Container & container, bool expecte
 	Index expected_index = 0;
 	auto it = std::begin(container);
 	for(auto [i, v] : stx::enumerate<Index>(container)) {
+		if constexpr(std::is_const_v<std::remove_reference_t<decltype(v)>>) {
+			cphinx.assert_equal(true, expected_const, "Const mismatch");
+		}
+		else {
+			cphinx.assert_equal(false, expected_const, "Const mismatch");
+		}
 		cphinx.assert_equal(i, expected_index, "Index mismatch");
-		cphinx.assert_equal(*v, *it, "Value mismatch");
-		cphinx.assert_equal(std::is_const_v<std::remove_reference_t<decltype(*v)>>, expected_const, "Const mismatch");
+		cphinx.assert_equal(v, *it, "Value mismatch");
 		++expected_index;
 		++it;
 	}
@@ -57,12 +62,32 @@ void enumerate_container(auto & cphinx, std::unordered_set<T> & container) {
 
 
 
+template<typename Index, typename Container>
+void enumerate_write(auto & cphinx, Container & container) {
+	auto it = std::begin(container);
+	for(auto [i, v] : stx::enumerate<Index>(container)) {
+		v += v;
+		cphinx.assert_equal(v, *it, "Value mismatch");
+		++it;
+	}
+}
+
+
 
 CPHINX_TEST(enumerate_c_array) {
 	int arr[5] = {1,2,3,4,5};
 	enumerate_container<int>(cphinx, arr);
 	enumerate_container<unsigned>(cphinx, arr);
 	enumerate_container<std::size_t>(cphinx, arr);
+}
+
+
+
+CPHINX_TEST(enumerate_write_c_array) {
+	int arr[5] = {1,2,3,4,5};
+	enumerate_write<int>(cphinx, arr);
+	enumerate_write<unsigned>(cphinx, arr);
+	enumerate_write<std::size_t>(cphinx, arr);
 }
 
 
@@ -76,11 +101,29 @@ CPHINX_TEST(enumerate_array) {
 
 
 
+CPHINX_TEST(enumerate_write_array) {
+	std::array<int, 5> arr = {1,2,3,4,5};
+	enumerate_write<int>(cphinx, arr);
+	enumerate_write<unsigned>(cphinx, arr);
+	enumerate_write<std::size_t>(cphinx, arr);
+}
+
+
+
 CPHINX_TEST(enumerate_vector) {
 	std::vector<int> vec = {1,2,3,4,5};
 	enumerate_container<int>(cphinx, vec);
 	enumerate_container<unsigned>(cphinx, vec);
 	enumerate_container<std::size_t>(cphinx, vec);
+}
+
+
+
+CPHINX_TEST(enumerate_write_vector) {
+	std::vector<int> vec = {1,2,3,4,5};
+	enumerate_write<int>(cphinx, vec);
+	enumerate_write<unsigned>(cphinx, vec);
+	enumerate_write<std::size_t>(cphinx, vec);
 }
 
 
