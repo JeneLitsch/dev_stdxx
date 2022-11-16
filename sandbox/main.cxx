@@ -1,11 +1,14 @@
 #include <vector>
 #include <iostream>
-#include "proto/enumerate.hxx"
+#include "proto/vectorN.hxx"
 
 int main() {
-	std::vector<int> arr = {10,20,30,40,50};
-
-	for(const auto [i, v] : stx::enumerate(arr)) {
-		std::cout << i << ") " << v << "\n";
-	}
+	stx::vectorN<float, 5> vec1 = {1,2,3,4,5};	
+	stx::vectorN<float, 5> vec2 = {2,2,2,2,2};	
+	std::cout << "vec1: " << vec1 << "\n";
+	std::cout << "vec2: " << vec2 << "\n";
+	std::cout << "+:" << vec1 + vec2 << "\n";
+	std::cout << "-:" << vec1 - vec2 << "\n";
+	std::cout << "*:" << vec1 * vec2 << "\n";
+	std::cout << "/:" << vec1 / vec2 << "\n";
 }
