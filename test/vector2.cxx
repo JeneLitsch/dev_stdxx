@@ -1,6 +1,17 @@
 #include "cphinx/cphinx.hxx"
 #include "stdxx/vector.hxx"
 
+bool is_successful(auto fx) {
+	try{
+		fx();
+		return true;
+	}
+	catch(...) {
+		return false;
+	}
+}
+
+
 CPHINX_TEST(vector2_ctor_float) {
 	constexpr static stx::vector2f vec {-1,2};
 	cphinx.assert_equal(vec.x, -1, "Invalid x");
@@ -13,6 +24,16 @@ CPHINX_TEST(vector2_ctor_int) {
 	const stx::vector2i vec {42};
 	cphinx.assert_equal(vec.x, 42, "Invalid x");
 	cphinx.assert_equal(vec.y, 42, "Invalid y");
+}
+
+
+CPHINX_TEST(vector2_index) {
+	constexpr static stx::vector2f vec {-1,2};
+	cphinx.assert_equal(vec[0], -1, "Invalid x");
+	cphinx.assert_equal(vec[1],  2, "Invalid y");
+	cphinx.assert_true(is_successful([&] { vec[0]; }));
+	cphinx.assert_true(is_successful([&] { vec[1]; }));
+	cphinx.assert_false(is_successful([&] { vec[2]; }));
 }
 
 
