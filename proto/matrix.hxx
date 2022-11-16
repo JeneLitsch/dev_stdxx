@@ -12,7 +12,9 @@ namespace stx {
 		}
 
 		matrix(T x, auto &&... args) 
-		: elements {x, static_cast<T>(args)...} {}
+		: elements {x, static_cast<T>(args)...} {
+			static_assert(sizeof...(args) + 1 == M*N, "Arguments do not match matrix size");
+		}
 
 		T & operator()(std::size_t n, std::size_t m) {
 			return this->elements[m * N + n];
