@@ -16,9 +16,9 @@ CPHINX_TEST(zip_vector) {
 		std::vector{1,2,3}
 	);
 	cphinx.assert_equal(zipped2, decltype(zipped2) {
-		 {1,1,1},
-		 {2,2,2},
-		 {3,3,3},
+		{1,1,1},
+		{2,2,2},
+		{3,3,3},
 	});
 
 
@@ -28,9 +28,9 @@ CPHINX_TEST(zip_vector) {
 		std::vector{1,2,3,4,5}
 	);
 	cphinx.assert_equal(zipped3, decltype(zipped3) {
-		 {1,1,1},
-		 {2,2,2},
-		 {3,3,3},
+		{1,1,1},
+		{2,2,2},
+		{3,3,3},
 	});
 
 
@@ -62,9 +62,9 @@ CPHINX_TEST(zip_vm_vector) {
 		std::vector{1,2,3}
 	);
 	cphinx.assert_equal(zipped2, decltype(zipped2) {
-		 {1,1,1},
-		 {2,2,2},
-		 {3,3,3},
+		{1,1,1},
+		{2,2,2},
+		{3,3,3},
 	});
 
 
@@ -74,9 +74,9 @@ CPHINX_TEST(zip_vm_vector) {
 		std::vector{1,2,3,4,5}
 	);
 	cphinx.assert_equal(zipped3, decltype(zipped3) {
-		 {1,1,1},
-		 {2,2,2},
-		 {3,3,3},
+		{1,1,1},
+		{2,2,2},
+		{3,3,3},
 	});
 
 
