@@ -2,22 +2,22 @@
 #include <iostream>
 #include "proto/enumerate.hxx"
 #include "proto/zip.hxx"
+#include "proto/graph.hxx"
+
 
 int main() {
-	std::vector<int> vec_a = {1,2,3};
-	std::vector<float> vec_b = {10,20,30,40};
-	const auto zipped = stx::fx::zip(vec_a, vec_b);
-	const auto [vec_a2, vec_b2] = stx::fx::unzip(zipped);
+	stx::adjacency_list adj_list;
+	adj_list.link(1, 2);
+	adj_list.link(1, 3);
+	adj_list.link(2, 3);
+	adj_list.link(3, 3);
 
-	for(const auto & [a, b] : zipped) {
-		std::cout << a << ", " << b << "\n";
-	}
-
-	for(const auto & x : vec_a2) {
-		std::cout << x  << "\n";
-	}
-
-	for(const auto & x : vec_b2) {
-		std::cout << x  << "\n";
-	}
+	std::cout << adj_list.is_adjacent(1,2) << "\n";
+	std::cout << adj_list.is_adjacent(1,3) << "\n";
+	std::cout << adj_list.is_adjacent(2,3) << "\n";
+	std::cout << adj_list.is_adjacent(3,3) << "\n";
+	std::cout << adj_list.is_adjacent(4,2) << "\n";
+	std::cout << adj_list.is_adjacent(4,3) << "\n";
+	std::cout << adj_list.is_adjacent(4,3) << "\n";
+	std::cout << adj_list.is_adjacent(4,3) << "\n";
 }
