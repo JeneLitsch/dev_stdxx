@@ -7,6 +7,7 @@ add_executable(test
 	bound.cxx
 	clamp.cxx
 	enumerate.cxx
+	graph.cxx
 	invlerp.cxx
 	lerp.cxx
 	main.cxx
